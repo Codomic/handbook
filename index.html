@@ -9,117 +9,19 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        font-family: sans-serif;
-        background: #f5f5f5;
         overflow: hidden;
       }
-      #toolbar {
-        background: #222;
-        color: #fff;
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      #toolbar button {
-        background: #444;
+      iframe {
         border: none;
-        color: white;
-        padding: 6px 12px;
-        margin: 0 4px;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      #toolbar span {
-        margin: 0 8px;
-      }
-      #viewerContainer {
-        height: calc(100% - 50px);
-        overflow: auto;
-        text-align: center;
-        background: white;
-      }
-      canvas {
-        display: block;
-        margin: 20px auto;
-        max-width: 95%;
-        height: auto;
+        width: 100%;
+        height: 100%;
       }
     </style>
   </head>
   <body>
-    <div id="toolbar">
-      <div>
-        <button onclick="prevPage()">◀ Prev</button>
-        <button onclick="nextPage()">Next ▶</button>
-        <span>Page: <span id="page_num">1</span> / <span id="page_count">?</span></span>
-      </div>
-      <div>
-        <button onclick="zoomOut()">➖ Zoom</button>
-        <button onclick="zoomIn()">➕ Zoom</button>
-        <a href="index.pdf" download style="color:white; text-decoration:none;">
-          <button>⬇ Download</button>
-        </a>
-      </div>
-    </div>
-
-    <div id="viewerContainer">
-      <canvas id="pdfViewer"></canvas>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-    <script>
-      const url = "index.pdf";
-      let pdfDoc = null,
-        pageNum = 1,
-        scale = 1.5,
-        canvas = document.getElementById("pdfViewer"),
-        ctx = canvas.getContext("2d");
-
-      pdfjsLib.getDocument(url).promise.then((pdfDoc_) => {
-        pdfDoc = pdfDoc_;
-        document.getElementById("page_count").textContent = pdfDoc.numPages;
-        renderPage(pageNum);
-      });
-
-      function renderPage(num) {
-        pdfDoc.getPage(num).then((page) => {
-          const viewport = page.getViewport({ scale });
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          const renderContext = {
-            canvasContext: ctx,
-            viewport: viewport,
-          };
-          page.render(renderContext);
-
-          document.getElementById("page_num").textContent = num;
-        });
-      }
-
-      function nextPage() {
-        if (pageNum >= pdfDoc.numPages) return;
-        pageNum++;
-        renderPage(pageNum);
-      }
-
-      function prevPage() {
-        if (pageNum <= 1) return;
-        pageNum--;
-        renderPage(pageNum);
-      }
-
-      function zoomIn() {
-        scale += 0.2;
-        renderPage(pageNum);
-      }
-
-      function zoomOut() {
-        if (scale <= 0.4) return;
-        scale -= 0.2;
-        renderPage(pageNum);
-      }
-    </script>
+    <iframe
+      src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://handbook.kled.ai/index.pdf"
+      allowfullscreen
+    ></iframe>
   </body>
 </html>
